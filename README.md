@@ -1,3 +1,22 @@
+Development notes
+
+### Problem to Solve:
+
+- [x] Simple interface (API or UI):
+- [x] Adding customers by First name, last name and date of birth fields.
+- [x] Editing customers.
+- [x] Deleting customers.
+- [ ] Searching for a customer by partial name match (first or last name).
+
+### Tech:
+
+- [x]Typescript
+- [x] React 16.7.0+ SPA
+- [ ] Redux store (Need to convert `this.setState` and `this.state` into Redux action / reducers and `mapStateToProps` respectively)
+- [ ] Basic Jest tests (Need to write more tests + reducer tests with Redux implementation)
+- [x] Use of components
+- [ ] Styled components
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

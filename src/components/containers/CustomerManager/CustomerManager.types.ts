@@ -1,6 +1,6 @@
 export interface Props {}
 
-export interface UserType {
+export interface CustomerType {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
@@ -8,7 +8,7 @@ export interface UserType {
 }
 
 export interface State {
-  isEditingUser: boolean;
-  editUser: UserType;
-  users: UserType[];
+  isEditingCustomer: boolean;
+  editCustomer: CustomerType;
+  users: CustomerType[];
 }
