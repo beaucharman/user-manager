@@ -10,7 +10,7 @@ Development notes
 
 ### Tech:
 
-- [x]Typescript
+- [x] Typescript
 - [x] React 16.7.0+ SPA
 - [ ] Redux store (Need to convert `this.setState` and `this.state` into Redux action / reducers and `mapStateToProps` respectively)
 - [ ] Basic Jest tests (Need to write more tests + reducer tests with Redux implementation)
