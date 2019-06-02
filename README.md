@@ -6,7 +6,7 @@
 - [x] Adding customers by First name, last name and date of birth fields.
 - [x] Editing customers.
 - [x] Deleting customers.
-- [ ] Searching for a customer by partial name match (first or last name).
+- [x] Searching for a customer by partial name match (first or last name).
 
 ### Tech:
 

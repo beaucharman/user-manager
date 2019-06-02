@@ -1,14 +1,16 @@
 export interface Props {}
 
 export interface CustomerType {
-  firstName: string;
-  lastName: string;
   dateOfBirth: string;
+  firstName: string;
   id: string;
+  lastName: string;
 }
 
 export interface State {
-  isEditingCustomer: boolean;
   editCustomer: CustomerType;
-  users: CustomerType[];
+  filteredCustomers: CustomerType[];
+  isEditingCustomer: boolean;
+  query: string;
+  customers: CustomerType[];
 }

@@ -2,6 +2,7 @@ import React, { Component, SyntheticEvent } from "react";
 import generateKey from "../../../utils/generateKey/generateKey";
 import CustomerForm from "../../layouts/CustomerForm/CustomerForm";
 import CustomerList from "../../layouts/CustomerList/CustomerList";
+import Input from "../../elements/Input/Input";
 import { Props, State, CustomerType } from "./CustomerManager.types";
 import "./CustomerManager.css";
 
@@ -9,18 +10,27 @@ class CustomerManager extends Component<Props, State> {
   initialState = {
     isEditingCustomer: false,
     editCustomer: {
-      firstName: "",
-      lastName: "",
       dateOfBirth: "",
-      id: ""
+      firstName: "",
+      id: "",
+      lastName: ""
     },
-    users: []
+    customers: [],
+    filteredCustomers: [],
+    query: ""
   };
 
   state = { ...this.initialState };
 
   render() {
-    const { editCustomer, isEditingCustomer, users } = this.state;
+    const {
+      editCustomer,
+      filteredCustomers,
+      isEditingCustomer,
+      customers,
+      query
+    } = this.state;
+
     return (
       <div className="CustomerManager">
         <div className="CustomerManager-Content">
@@ -28,9 +38,24 @@ class CustomerManager extends Component<Props, State> {
             <h1>Customer Manager</h1>
           </header>
 
+          {!isEditingCustomer && !!customers.length && (
+            <Input
+              label="Search for user"
+              name="search"
+              type="text"
+              handleOnChange={this.handleSearch}
+              value={query}
+            />
+          )}
+
           {!isEditingCustomer && (
             <CustomerList
-              users={users}
+              customers={!query ? customers : filteredCustomers}
+              noResultsMessage={
+                !query
+                  ? "There are currently no customers"
+                  : "No customers match your search"
+              }
               handleDeleteCustomer={this.handleDeleteCustomer}
               handleEditCustomer={this.handleEditCustomer}
             />
@@ -50,7 +75,7 @@ class CustomerManager extends Component<Props, State> {
 
   handleEditCustomer = (id: string) => {
     this.setState((preState: State) => ({
-      editCustomer: preState.users.filter(
+      editCustomer: preState.customers.filter(
         (user: CustomerType) => user.id === id
       )[0],
       isEditingCustomer: true
@@ -59,7 +84,28 @@ class CustomerManager extends Component<Props, State> {
 
   handleDeleteCustomer = (id: string) => {
     this.setState((prevState: State) => ({
-      users: prevState.users.filter((user: CustomerType) => user.id !== id)
+      customers: prevState.customers.filter(
+        (user: CustomerType) => user.id !== id
+      )
+    }));
+  };
+
+  handleSearch = (event: SyntheticEvent) => {
+    event.persist();
+
+    // @ts-ignore
+    const { value } = event.target;
+
+    this.setState(() => ({
+      filteredCustomers: this.state.customers.filter((user: CustomerType) => {
+        return (
+          `${user.firstName} ${user.lastName}`
+            .toUpperCase()
+            .indexOf(value.toUpperCase()) !== -1
+        );
+      }),
+
+      query: value
     }));
   };
 
@@ -78,7 +124,7 @@ class CustomerManager extends Component<Props, State> {
   createCustomer = (event: SyntheticEvent) => {
     event.preventDefault();
 
-    const editCustomers = this.state.users.concat(
+    const editCustomers = this.state.customers.concat(
       // @ts-ignore
       Object.assign({}, this.state.editCustomer, {
         id: generateKey()
@@ -86,7 +132,7 @@ class CustomerManager extends Component<Props, State> {
     );
 
     this.setState(() => ({
-      users: editCustomers,
+      customers: editCustomers,
       editCustomer: this.initialState.editCustomer
     }));
   };
@@ -94,21 +140,21 @@ class CustomerManager extends Component<Props, State> {
   saveCustomer = (event: SyntheticEvent) => {
     event.preventDefault();
 
-    const { editCustomer, users } = this.state;
+    const { editCustomer, customers } = this.state;
 
-    const userIndex = users.findIndex(
+    const userIndex = customers.findIndex(
       (user: CustomerType) => user.id === editCustomer.id
     );
 
     const updatedCustomers = [
-      ...users.slice(0, userIndex),
+      ...customers.slice(0, userIndex),
       this.state.editCustomer,
-      ...users.slice(userIndex + 1)
+      ...customers.slice(userIndex + 1)
     ];
 
     this.setState(() => ({
       isEditingCustomer: false,
-      users: updatedCustomers,
+      customers: updatedCustomers,
       editCustomer: this.initialState.editCustomer
     }));
   };
